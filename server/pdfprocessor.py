@@ -1,6 +1,5 @@
 from PyPDF2 import PdfReader
 from TTS.api import TTS
-import os
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 
@@ -59,13 +58,14 @@ def extractext():
 
     elif request.method == 'POST':
         try:
-            f = request.files['file']
-            file_name = f.filename
 
-            save_path = os.path.join(
-                app.config.get('upload_folder'), file_name)
-            f.save(save_path)
-            wavFilePath = cvtPdfToWav(file_name)
+            file_name = request
+
+            print(file_name)
+            with open("tmp_files/"+file_name,"wb") as inputPdf:
+                inputPdf.write(request['content'])
+
+            wavFilePath = cvtPdfToWav("tmp_files/"+file_name)
             response = {}
             with open(wavFilePath, "rb") as wavContent:
                 response["content"] = wavContent
@@ -78,4 +78,5 @@ def extractext():
 
 
 if __name__ == "__main__":
+
     app.run(debug=True)
