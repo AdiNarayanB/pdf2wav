@@ -1,9 +1,12 @@
+import codecs
+
 from PyPDF2 import PdfReader
 from TTS.api import TTS
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response,send_file
 from flask_cors import CORS
 
-
+import base64
+import json
 def getTextFromPdf(pdfFilePath: str) -> str:
     pdfObj = PdfReader(pdfFilePath)
 
@@ -18,11 +21,14 @@ def getWavFromText(transcript: str, filename: str) -> str:
     model_name = TTS.list_models()[0]
 
     tts = TTS(model_name)
+    filepath = filename+".wav"
+
+
 
     tts.tts_to_file(text=transcript, speaker=tts.speakers[1], language=tts.languages[0],
-                    file_path="/" + filename + "_" + "speech.wav")
+                    file_path=filepath)
 
-    return filename + "_" + "speech.wav"
+    return filepath
 
 
 # Running a single speaker model
@@ -31,6 +37,11 @@ def getWavFromText(transcript: str, filename: str) -> str:
 
 # Run TTS
 def cvtPdfToWav(pdfFileName: str) -> str:
+    import os
+    import sys
+    files = [f for f in os.listdir('.') if os.path.isfile(f)]
+    print(files)
+    print(os.getcwd())
     text = getTextFromPdf(pdfFileName)
     wavFilePath = getWavFromText(text, pdfFileName)
     return wavFilePath
@@ -59,18 +70,20 @@ def extractext():
     elif request.method == 'POST':
         try:
 
-            file_name = request
+            f = request.files['file']
+            file_name = f.filename
 
             print(file_name)
-            with open("tmp_files/"+file_name,"wb") as inputPdf:
-                inputPdf.write(request['content'])
+            f.save("tmp_files/"+file_name)
+
 
             wavFilePath = cvtPdfToWav("tmp_files/"+file_name)
             response = {}
-            with open(wavFilePath, "rb") as wavContent:
-                response["content"] = wavContent
-
+            with open(wavFilePath,"rb") as f:
+                        response['content'] = base64.b64encode(f.read()).decode("utf8")
             return response
+            #return send_file(wavFilePath,'audio/wav')
+
         except Exception as e:
             return jsonify(e)
     else:
