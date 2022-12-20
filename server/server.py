@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 from serverPdf2Wav import pdf2wavServer
-
+from cache.cache import RedisCache
 application = app = Flask(__name__)
 
 app.config['UPLOAD_EXTENSIONS'] = ['.docx', '.doc', '.txt', '.pdf', '.html']
@@ -29,7 +29,9 @@ def extractwav():
             file_name = f.filename
             save_path = "tmp_files/" + file_name
             f.save(save_path)
-            pdf2wavServerobj = pdf2wavServer("pdf", "wav", "bytes", save_path)
+            redisObj = RedisCache("127.0.0.1")
+
+            pdf2wavServerobj = pdf2wavServer("pdf", "wav", "bytes", save_path,redisObj)
 
             response = pdf2wavServerobj.executePdfToWav()
 

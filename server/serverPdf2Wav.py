@@ -5,13 +5,14 @@ import typing
 
 
 class pdf2wavServer:
-    def __init__(self, docFmt, audioFmt, responseType, pdfFilePath):
+    def __init__(self, docFmt, audioFmt, responseType, pdfFilePath,cacheObj):
         self.docFmt = docFmt
         self.audioFmt = audioFmt
         self.responseType = responseType
         self.pdfFilePath = pdfFilePath
         self.wavFilePath = self.pdfFilePath + ".wav"
-
+        self.wavObj = None
+        self.cache = cacheObj
     def getTextFromPdf(self) -> str:
         pdfObj = PdfReader(self.pdfFilePath)
 
@@ -27,9 +28,14 @@ class pdf2wavServer:
         tts = TTS(model_name)
         filepath = self.pdfFilePath + ".wav"
 
-        tts.tts_to_file(text=transcript, speaker=tts.speakers[1], language=tts.languages[0],
-                        file_path=filepath)
+        wav = tts.tts(text=transcript, speaker=tts.speakers[1], language=tts.languages[0])
+        cacheHitObj = self.cache.fromRedis(filepath)
 
+        if cacheHitObj is None:
+            self.cache.put(wav,filepath)
+
+        else:
+            return cacheHitObj
     # Running a single speaker model
 
     # Init TTS with the target model name
@@ -42,12 +48,14 @@ class pdf2wavServer:
         print(files)
         print(os.getcwd())
         text = self.getTextFromPdf()
-        self.getWavFromText(text)
+        wavObj = self.getWavFromText(text)
+        self.wavObj = wavObj
 
     def dumpFile(self) -> typing.Dict[str, str]:
         response = {}
-        with open(self.wavFilePath, "rb") as f:
-            response['content'] = base64.b64encode(f.read()).decode("utf8")
+
+
+        response['content'] = base64.b64encode(self.wavObj).decode("utf8")
         return response
 
     def executePdfToWav(self):
