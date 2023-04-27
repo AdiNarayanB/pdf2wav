@@ -42,5 +42,5 @@ Flask is NOT a reliable web server. Nginx and Gunicorn make flask capable of han
 
 Dependency Inversion and Injection in Python is very easy to violate due to a lack of type checking. Using a plugin like [mypy](https://mypy.readthedocs.io/en/stable/index.html) can help mitigate this. 
 
-There aren't a lot of experiments done on Reading and Writing wav files from/to different cache implementations. From this perspective, I do think that repurposing this project as a tool for analyzing bulk R/W performance of multimedia on different storage implementations(S3, NFS, Redis, etc).
+There aren't a lot of experiments done on Reading and Writing wav files from/to different cache implementations. From this perspective, I do think that repurposing this project as a tool for analyzing bulk R/W performance of multimedia on different storage implementations(S3, NFS, Redis, etc) might be a future avenue for improvement. 
 
