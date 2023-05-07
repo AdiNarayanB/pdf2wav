@@ -36,7 +36,7 @@ Features Requests are tracked in [this](https://github.com/users/adiraokhoury/pr
 The internals of why and how I built this is detailed in my [blog post](https://adiraokhoury.github.io/blogPost1.html) on my [website](https://adiraokhoury.github.io). 
 ## Lessons Learned
 
-Byte Streams are hard to work with even if a blocking(Wait for the entire byte stream before working on it on the client side) approach is used. 
+
 
 Flask is NOT a reliable web server. Nginx and Gunicorn make flask capable of handling high traffic. 
 
@@ -44,3 +44,10 @@ Dependency Inversion and Injection in Python is very easy to violate due to a la
 
 There aren't a lot of experiments done on Reading and Writing wav files from/to different cache implementations. From this perspective, I do think that repurposing this project as a tool for analyzing bulk R/W performance of multimedia on different storage implementations(S3, NFS, Redis, etc) might be a future avenue for improvement. 
 
+##Setup and Installation
+
+Install the requirements:
+
+'''
+pip3 install requirements.txt
+'''
