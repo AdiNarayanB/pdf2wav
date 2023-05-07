@@ -44,7 +44,7 @@ The internals of why and how I built this is detailed in my [blog post](https://
 pip3 install requirements.txt
 ```
 
-2.__Setup the Servers__:
+2.Setup the Servers:
 
 Setting up Redis:
 
@@ -57,6 +57,7 @@ Setting up API endpoints:
 ```
 gunicorn --workers 4 --bind 0.0.0.0:5000 wsgi:app 
 ```
+
 3. Running tests:
 
 Navigate to the client folder and run ```pytest```. Tests are still a heavy WIP. 
