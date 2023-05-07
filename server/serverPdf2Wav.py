@@ -5,48 +5,47 @@ import typing
 
 
 class pdf2wavServer:
-    def __init__(self, docFmt, audioFmt, responseType, pdfFilePath,cacheObj):
+    def __init__(self, docFmt, audioFmt, responseType, pdfObj,cacheObj,clientWavPath):
         self.docFmt = docFmt
         self.audioFmt = audioFmt
+        self.cacheObj = cacheObj
         self.responseType = responseType
-        self.pdfFilePath = pdfFilePath
-        self.wavFilePath = self.pdfFilePath + ".wav"
+        self.clientWavPath = clientWavPath
+        self.pdfObj = pdfObj
+
         self.wavObj = None
-        self.cache = cacheObj
+
     def getTextFromPdf(self) -> str:
-        pdfObj = PdfReader(self.pdfFilePath)
+
 
         page_text = ""
-        for page in pdfObj.pages:
+        for page in self.pdfObj.pages:
             page_text += page.extractText()
         text = page_text
         return text
 
-    def getWavFromText(self, transcript: str):
+    def getWavFromText(self, transcript: str) -> bytes:
         model_name = TTS.list_models()[0]
 
         tts = TTS(model_name)
-        filepath = self.pdfFilePath + ".wav"
+        filepath = self.clientWavPath
 
-        wav = tts.tts(text=transcript, speaker=tts.speakers[1], language=tts.languages[0])
-        cacheHitObj = self.cache.fromRedis(filepath)
+        wav = tts.tts_to_file(text=transcript, speaker=tts.speakers[1], language=tts.languages[0],file_path=filepath)
 
-        if cacheHitObj is None:
-            self.cache.put(wav,filepath)
+        with open(filepath,"rb") as f:
+                bytes = f.read()
+        return bytes
 
-        else:
-            return cacheHitObj
     # Running a single speaker model
 
     # Init TTS with the target model name
 
     # Run TTS
-    def cvtPdfToWav(self):
+    def cvtPdfToWav(self) -> None:
         import os
 
         files = [f for f in os.listdir('.') if os.path.isfile(f)]
-        print(files)
-        print(os.getcwd())
+
         text = self.getTextFromPdf()
         wavObj = self.getWavFromText(text)
         self.wavObj = wavObj
@@ -58,7 +57,8 @@ class pdf2wavServer:
         response['content'] = base64.b64encode(self.wavObj).decode("utf8")
         return response
 
-    def executePdfToWav(self):
+    def executePdfToWav(self) -> dict:
+
         self.cvtPdfToWav()
         response = self.dumpFile()
         return response
