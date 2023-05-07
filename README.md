@@ -87,6 +87,7 @@ Supported API Routes at the moment and how to work with them
 
 ```
 /register
+
 Description: Identifies a user and generates a token for using the pdf2wav service.
 Input: Json String of the form {'username': STRING, 'password':STRING}
 
@@ -96,6 +97,7 @@ cURL command: curl -X POST http://0.0.0.0:5000/register -H 'Content-Type: applic
 
 ```
 /pdf2wav
+
 Description: Converts a pdf encoded as bytes into a wav file with the transcription.
 Input: Json String of the form {'username':STRING, 'token': STRING, 'data': BYTES}
 
