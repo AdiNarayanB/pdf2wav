@@ -85,7 +85,8 @@ python3.8  cli.py generatewavfrompdf --pdffilepath /home/adithya/Desktop/Adithya
 
 Supported API Routes at the moment and how to work with them
 
-```/register
+```
+/register
 Description: Identifies a user and generates a token for using the pdf2wav service.
 Input: Json String of the form {'username': STRING, 'password':STRING}
 
@@ -93,7 +94,8 @@ Output: Json String of the form {"password":"gnjgjgjgj","token":"63D24NG679OG5BE
 cURL command: curl -X POST http://0.0.0.0:5000/register -H 'Content-Type: application/json' -d '{"username":"my_login","password":"gnjgjgjgj"}'
 ```
 
-```/pdf2wav
+```
+/pdf2wav
 Description: Converts a pdf encoded as bytes into a wav file with the transcription.
 Input: Json String of the form {'username':STRING, 'token': STRING, 'data': BYTES}
 
