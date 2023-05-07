@@ -38,13 +38,13 @@ The internals of why and how I built this is detailed in my [blog post](https://
 
 ## Setup and Installation
 
-Installing the requirements:
+1.Installing the requirements:
 
 ```
 pip3 install requirements.txt
 ```
 
-__Setup the Servers__:
+2.__Setup the Servers__:
 
 Setting up Redis:
 
@@ -58,18 +58,18 @@ Setting up API endpoints:
 gunicorn --workers 4 --bind 0.0.0.0:5000 wsgi:app 
 ```
 
-Adhoc Testing:
+3.Adhoc Testing:
 
-Navigate to the client folder.
+i) Navigate to the client folder.
 
-Then run the generateToken utlity from cli.py, that will get you the credentials you need to work with the API. 
+ii) Then run the generateToken utlity from cli.py, that will get you the credentials you need to work with the API. 
 ```
 python3.8  cli.py generatetoken --username asdf --password qwerty
 
 ```
 This generates a file called ```tokens.json``` . Make sure cli.py and tokens.json lie in the same directory. 
 
-Now, run the pdf2wav utility, that will take a pdf path and a file path that youd want to save your transcription in. 
+iii) Now, run the pdf2wav utility, that will take a pdf path and a file path that youd want to save your transcription in. 
 
 ```
 python3.8  cli.py generatewavfrompdf --pdffilepath /home/adithya/Desktop/AdithyaNarayan-6.pdf --wavfilesavepath /home/adithya/testRecordingFINAL.wav
