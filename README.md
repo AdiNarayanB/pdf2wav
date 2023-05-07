@@ -48,6 +48,6 @@ There aren't a lot of experiments done on Reading and Writing wav files from/to 
 
 Install the requirements:
 
-'''
+```
 pip3 install requirements.txt
-'''
+```
