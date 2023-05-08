@@ -58,12 +58,19 @@ Setting up API endpoints:
 gunicorn --workers 4 --bind 0.0.0.0:5000 wsgi:app 
 ```
 
-3. Running tests:
+
+
+
+
+
+
+3.Adhoc Testing:
+
+Testing with pytest:
 
 Navigate to the client folder and run ```pytest```. Tests are still a heavy WIP. 
 
-
-4.Adhoc Testing:
+Trying it yourself:
 
 i) Navigate to the client folder.
 
