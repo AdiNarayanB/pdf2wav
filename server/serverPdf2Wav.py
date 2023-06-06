@@ -53,7 +53,6 @@ class pdf2wavServer:
     def dumpFile(self) -> typing.Dict[str, str]:
         response = {}
 
-
         response['content'] = base64.b64encode(self.wavObj).decode("utf8")
         return response
 
