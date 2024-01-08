@@ -40,7 +40,9 @@ The internals of why and how I built this is detailed in my [blog post](https://
 
 1.Installing the requirements:
 
+
 ```
+cd server
 pip3 install requirements.txt
 ```
 
@@ -55,6 +57,7 @@ redis-server
 Setting up API endpoints:
 
 ```
+cd server
 gunicorn --workers 4 --bind 0.0.0.0:5000 wsgi:app 
 ```
 
